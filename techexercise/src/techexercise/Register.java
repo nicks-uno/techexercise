@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class Register
+ * Account registration servlet.
  */
 @WebServlet("/Register")
 public class Register extends HttpServlet {
@@ -68,6 +68,7 @@ public class Register extends HttpServlet {
 				"<a href=\"/WEB-INF/admin.html\">Click here to view all users registered.</a>\n" +
 				"</footer>\n" +
 				"</html>");
+		out.close();
 	}
 
 	/**
