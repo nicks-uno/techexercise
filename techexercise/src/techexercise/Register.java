@@ -41,34 +41,41 @@ public class Register extends HttpServlet {
 		Date date = new Date(System.currentTimeMillis());
 		String regdate = date.toString();
 		
+		PrintWriter out = response.getWriter();
+		
 		try {
 			DBConnection.createConnection(getServletContext());
 			Connection connection = DBConnection.connection;
 			
-			String tempstate  = "INSERT INTO registry VALUES('" + uname + "', '" + fname + "', '" + lname + "', '" + email + "', '" + pass + "', '" + regdate + "');";
+			String tempstate  = "INSERT INTO registry(uname, fname, lname, email, pass, regdate) VALUES('" + uname + "', '" + fname + "', '" + lname + "', '" + email + "', '" + pass + "', '" + regdate + "');";
 			PreparedStatement insertStatement = connection.prepareStatement(tempstate);
 			insertStatement.executeUpdate();
-		} catch (IOException | SQLException e) {
-			// TODO Output an error webpage
+			
+			response.setContentType("text/html");
+			
+			out.println("<html>\n" +
+					"<head>\n" +
+					"<title>Registration Successful</title>\n" +
+					"</head>\n" +
+					"<body>\n");
+			out.println("<p style=\"font-family:Times New Roman; font-size:12\" align=\"center\">\n" +
+					"Congratulations " + uname + "! Your account has been successfully registered.\n" +
+					"</p>\n" +
+					"</body>\n");
+			out.println("<footer style=\"font-family:Times New Roman; font-size:12\" align=\"center\">\n" +
+					"<a href=\"/admin.html\">Click here to view all users registered.</a>\n" +
+					"</footer>\n" +
+					"</html>");
+			out.close();
+		} catch (IOException | SQLException | ClassNotFoundException e) {
+			out.println("<!DOCTYPE html><html><head><title>Registration Failure</title><style> body { text-align:left; font-family:Times New Roman; font-size:12; } h1 { text-align:left; font-family:Times New Roman; font-size:16; font-weight: bold; }</style></head>");
+			out.println("<body><h1>Registration Failure</h1> <br> Failed to connect to the main database. Try again later.");
+			out.println("</body></html>");
+			out.close();
 			e.printStackTrace();
 		}
 		
-		response.setContentType("text/html");
-		PrintWriter out = response.getWriter();
-		out.println("<html>\n" +
-				"<head>\n" +
-				"<title>Registration Successful</title>\n" +
-				"</head>\n" +
-				"<body>\n");
-		out.println("<p style=\"font-family:Times New Roman; font-size:12\" align=\"center\">\n" +
-				"Congratulations " + uname + "! Your account has been successfully registered.\n" +
-				"</p>\n" +
-				"</body>\n");
-		out.println("<footer style=\"font-family:Times New Roman; font-size:12\" align=\"center\">\n" +
-				"<a href=\"/WEB-INF/admin.html\">Click here to view all users registered.</a>\n" +
-				"</footer>\n" +
-				"</html>");
-		out.close();
+		
 	}
 
 	/**

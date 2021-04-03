@@ -31,6 +31,7 @@ public class Registry extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PrintWriter out = response.getWriter();
 		try {
 			DBConnection.createConnection(getServletContext());
 			Connection connection = DBConnection.connection;
@@ -41,24 +42,39 @@ public class Registry extends HttpServlet {
 			String adminquery = "SELECT * FROM registry WHERE id=1;";
 			PreparedStatement adminstate = connection.prepareStatement(adminquery);
 			ResultSet adminset = adminstate.executeQuery();
-			
-			PrintWriter out = response.getWriter();
-			
+
+			adminset.next();
 			if (testuname.contentEquals(adminset.getString("uname")) && testpass.contentEquals(adminset.getString("pass")))
 			{
-				//TODO
-				out.println("<!DOCTYPE html><html><head><title>User Registry</title><style ");
+				String tempquery = "SELECT * FROM registry;";
+				PreparedStatement resultstate = connection.prepareStatement(tempquery);
+				ResultSet resultset = resultstate.executeQuery();
+				
+				out.println("<!DOCTYPE html><html><head><title>User Registry</title><style> body { text-align:left; font-family:serif; font-size:14; } h1 { text-align:center; } table { width:400px; }</style></head>");
+				out.println("<body><h1>Registry</h1><br><table><tr><th>id</th><th>Username</th><th>Last Name</th><th>First Name</th><th>Email</th><th>Password</th><th>Registration Date</th></tr>");
+				if (resultset.next())
+				{
+					out.printf("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>**********</td><td>%s</td></tr>\n", resultset.getString("id"), resultset.getString("uname"), resultset.getString("lname"), resultset.getString("fname"), resultset.getString("email"), resultset.getString("regdate"));
+				}
+				resultset.next();
+				out.printf("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>**********</td><td>%s</td></tr>\n", resultset.getString("id"), resultset.getString("uname"), resultset.getString("lname"), resultset.getString("fname"), resultset.getString("email"), resultset.getString("regdate"));
+				out.println("</table></body></html>");
+				out.close();
 			}
 			else
 			{
 				//TODO Output error page
+				out.println("<!DOCTYPE html><html><head><title>Login Failure</title><style> body { text-align:left; font-family:Times New Roman; font-size:12; } h1 { text-align:left; font-family:Times New Roman; font-size:16; font-weight: bold; }</style></head>");
+				out.println("<body><h1>Login Failure</h1> <br> Incorrect login and password. Make sure you are logging in with the administrator account and try again by clicking <a href=\"/admin.html\">here</a>");
+				out.println("</body></html>");
+				out.close();
 			}
 			
-			
-			
-			
-		} catch (IOException | SQLException e) {
-			// TODO Auto-generated catch block
+		} catch (IOException | SQLException | ClassNotFoundException e) {
+			out.println("<!DOCTYPE html><html><head><title>Listing Failure</title><style> body { text-align:left; font-family:Times New Roman; font-size:12; } h1 { text-align:left; font-family:Times New Roman; font-size:16; font-weight: bold; }</style></head>");
+			out.println("<body><h1>Listing Failure</h1> <br> Failed to connect to the main database. Try again later.");
+			out.println("</body></html>");
+			out.close();
 			e.printStackTrace();
 		}
 		

@@ -13,11 +13,13 @@ public class DBConnection {
 	static Properties properties = new Properties();
 	static Connection connection = null;
 	
-	static void createConnection(ServletContext context) throws IOException, SQLException
+	static void createConnection(ServletContext context) throws IOException, SQLException, ClassNotFoundException
 	{
 		String path = "/WEB-INF/lib/config.properties";
 		InputStream in = context.getResourceAsStream(path);
 		properties.load(in);
+		
+		Class.forName("com.mysql.jdbc.Driver");
 		
 		String connectionURL = properties.getProperty("url").trim();
 		String username = properties.getProperty("user").trim();
