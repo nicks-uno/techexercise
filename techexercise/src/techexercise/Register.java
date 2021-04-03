@@ -58,19 +58,20 @@ public class Register extends HttpServlet {
 					"<title>Registration Successful</title>\n" +
 					"</head>\n" +
 					"<body>\n");
-			out.println("<p style=\"font-family:Times New Roman; font-size:12\" align=\"center\">\n" +
+			out.println("<p style=\"font-family:Times New Roman; font-size:14; text-align:center\" align=\"center\">\n" +
 					"Congratulations " + uname + "! Your account has been successfully registered.\n" +
 					"</p>\n" +
 					"</body>\n");
-			out.println("<footer style=\"font-family:Times New Roman; font-size:12\" align=\"center\">\n" +
+			out.println("<footer style=\"font-family:Times New Roman; font-size:14; text-align:center\" align=\"center\">\n" +
 					"<a href=\"/techexercise/admin.html\">Click here to view all users registered.</a>\n" +
 					"</footer>\n" +
 					"</html>");
 			out.close();
 		} catch (IOException | SQLException | ClassNotFoundException e) {
-			out.println("<!DOCTYPE html><html><head><title>Registration Failure</title><style> body { text-align:left; font-family:Times New Roman; font-size:12; } h1 { text-align:left; font-family:Times New Roman; font-size:16; font-weight: bold; }</style></head>");
+			out.println("<!DOCTYPE html><html><head><title>Registration Failure</title><style> body { text-align:left; font-family:Times New Roman; font-size:14; } h1 { text-align:left; font-family:Times New Roman; font-size:16; font-weight: bold; }");
+			out.println("footer { text-align:center; font-family:Times New Roman; font-size:14; }</style></head>");
 			out.println("<body><h1>Registration Failure</h1> <br> Failed to connect to the main database. Try again later.");
-			out.println("</body></html>");
+			out.println("</body><footer><a href=\"/techexercise/Welcome.html\">Register an account.</a></footer></html>");
 			out.close();
 			e.printStackTrace();
 		}
