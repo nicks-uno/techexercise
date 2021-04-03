@@ -63,7 +63,7 @@ public class Register extends HttpServlet {
 					"</p>\n" +
 					"</body>\n");
 			out.println("<footer style=\"font-family:Times New Roman; font-size:12\" align=\"center\">\n" +
-					"<a href=\"/admin.html\">Click here to view all users registered.</a>\n" +
+					"<a href=\"/techexercise/admin.html\">Click here to view all users registered.</a>\n" +
 					"</footer>\n" +
 					"</html>");
 			out.close();
